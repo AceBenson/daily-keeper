@@ -1,9 +1,12 @@
 import React from 'react'
+import { Typography } from '@material-ui/core'
 
 export default function Calendar() {
   return (
     <div>
-      <h1>Calendar</h1>
+      <Typography variant="h4">
+        h4. Calendar
+      </Typography>
     </div>
   )
 }

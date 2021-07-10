@@ -1,31 +1,40 @@
 import React from 'react'
+import clsx from 'clsx';
 import { NavLink } from "react-router-dom";
-import { Hidden, Drawer, List, ListItem, ListItemIcon, ListItemText, makeStyles } from '@material-ui/core';
-// import theme from '../style';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, makeStyles, Toolbar } from '@material-ui/core';
+
+const drawerWidth = 220;
 
 const styles = theme => ({
-  list: {
-
-  },
   navlink: {
     textDecoration: "none",
-  },
-  listitem: {
-    
+    color: theme.palette.text.primary,
   },
   drawer: {
-    width: `${260}px`,
-  }
+    flexShrink: 0,
+    width: `${drawerWidth}px`,
+  },
+  drawerOpen: {
+    width: `${drawerWidth}px`,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  drawerClose: {
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    overflowX: 'hidden',
+    width: theme.spacing(7) + 1,
+  },
 });
 
 const useStyles = makeStyles(styles);
 
 export default function Sidebar(props) {
   const classes = useStyles();
-
-  const brand = (
-    <h1>Daily Keeper</h1>
-  );
 
   const links = (
     <List className={classes.list} >
@@ -52,19 +61,24 @@ export default function Sidebar(props) {
 
   return (
     <div>
-      <Hidden smDown className={classes.drawer}>
-        <Drawer
-          open
-          variant="persistent"
-          anchor="left"
-          classes={{
-            paper: classes.drawer
-          }}
-        >
-          {brand}
-          {links}
-        </Drawer>
-      </Hidden>
+      <Drawer
+        open
+        variant="permanent"
+        anchor="left"
+        className={clsx(classes.drawer, {
+          [classes.drawerOpen]: props.open,
+          [classes.drawerClose]: !props.open,
+        })}
+        classes={{
+          paper: clsx({
+            [classes.drawerOpen]: props.open,
+            [classes.drawerClose]: !props.open,
+          }),
+        }}
+      >
+        <Toolbar />
+        {links}
+      </Drawer>
     </div>
   )
 }

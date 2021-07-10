@@ -11,25 +11,25 @@ import Setting from './views/Setting'
 const routes = [
   {
     path: "/tracker",
-    name: "Tracker",
+    name: "TRACKER",
     icon: TimerIcon,
     component: Tracker,
   },
   {
     path: "/calendar",
-    name: "Calendar",
+    name: "CALENDAR",
     icon: CalendarTodayIcon,
     component: Calendar,
   },
   {
     path: "/dashaboard",
-    name: "Dashboard",
+    name: "DASHBOARD",
     icon: DashboardIcon,
     component: Dashboard,
   },
   {
     path: "/setting",
-    name: "Setting",
+    name: "SETTING",
     icon: SettingsIcon,
     component: Setting,
   },

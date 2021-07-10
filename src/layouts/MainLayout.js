@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, CssBaseline, Toolbar } from '@material-ui/core';
 import { Switch, Route, Redirect } from "react-router-dom";
 
 import Sidebar from '../components/Sidebar.js'
@@ -10,15 +10,11 @@ import routes from "../routes"
 const styles = theme => ({
   wrapper: {
     height: "100vh",
-  },
-  mainPanel: {
-    width: `calc(100% - ${260}px)`,
-    float: "right",
-    border: "solid 1px",
+    display: "flex",
   },
   content: {
-    padding: "30px 15px",
-    marginTop: `${70}px`,
+    flexGrow: 1,
+    padding: theme.spacing(3),
   }
 });
 
@@ -42,15 +38,21 @@ const switchRoutes = (
 
 export default function MainLayout() {
   const classes = useStyles();
+  const [open, setOpen] = React.useState(true);
+
+  const handleDrawerOpen = () => {
+    console.log(`handleDrawerOpen: ${open}`)
+    setOpen(!open);
+  };
+
   return (
     <div className={classes.wrapper}>
-      <Sidebar
-        routes={routes}
-      />
-      <div className={classes.mainPanel}>
-        <Navbar />
-        <div className={classes.content}>{switchRoutes}</div>
-        <h1>MainPanel</h1>
+      <CssBaseline />
+      <Navbar handleDrawerOpen={handleDrawerOpen} />
+      <Sidebar routes={routes} open={open} />
+      <div className={classes.content}>
+        <Toolbar /> {/* Use Toolbar as margin control */}
+        {switchRoutes}
       </div>
     </div>
   )
