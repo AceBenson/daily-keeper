@@ -41,7 +41,6 @@ export default function MainLayout() {
   const [open, setOpen] = React.useState(true);
 
   const handleDrawerOpen = () => {
-    console.log(`handleDrawerOpen: ${open}`)
     setOpen(!open);
   };
 

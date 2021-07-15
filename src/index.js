@@ -13,10 +13,11 @@ const theme = createMuiTheme({
       // This is green.A700 as hex.
       main: '#11cb5f',
     },
-    secondary: {
-      // This is green.A700 as hex.
-      main: '#11cb5f',
-    },
+    // secondary: {
+    //   // This is green.A700 as hex.
+    //   // main: '#11cb5f',
+
+    // },
   },
 });
 

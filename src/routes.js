@@ -3,7 +3,7 @@ import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import SettingsIcon from '@material-ui/icons/Settings';
 
-import Tracker from './views/Tracker'
+import Tracker from './views/Tracker/Tracker'
 import Calendar from './views/Calendar'
 import Dashboard from './views/Dashboard'
 import Setting from './views/Setting'
