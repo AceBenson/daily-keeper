@@ -22,7 +22,7 @@ export default function WorkingTimer(props) {
   //   setWorkingItem({...workingItem, project: event.target.value});
   // };
   React.useEffect(() => {
-    const timerId = setTimeout(() => {if (isCounting) {setElapsedTime(elapsedTime + 1)}}, 1000);
+    const timerId = setTimeout(() => {if (isCounting) {setElapsedTime(new Date().getTime() - props.workingItem.startTime.getTime())}}, 1000);
     return () => clearTimeout(timerId);
   });
 
@@ -70,7 +70,7 @@ export default function WorkingTimer(props) {
             </Grid>
             <Grid item md={2} xs={12}>
              <Typography variant="h6">
-              {new Date(elapsedTime * 1000).toISOString().substr(11, 8)}
+              {new Date(elapsedTime).toISOString().substr(11, 8)}
              </Typography>
             </Grid>
             <Grid item md={2} xs={12}>
