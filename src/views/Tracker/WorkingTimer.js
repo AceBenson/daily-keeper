@@ -1,18 +1,18 @@
 import React from 'react'
-import clsx from 'clsx';
-import { Paper, FormControl, Select, MenuItem, Grid, FormHelperText, InputLabel, Button, makeStyles } from '@material-ui/core'
+// import clsx from 'clsx';
+import { Paper, FormControl, Select, MenuItem, Grid, FormHelperText, InputLabel, Button, /*makeStyles*/ } from '@material-ui/core'
 import { Typography } from '@material-ui/core';
 
-const styles = theme => ({
-  hidden: {
-    display: "none"
-  }
-});
+// const styles = theme => ({
+//   hidden: {
+//     display: "none"
+//   }
+// });
 
-const useStyles = makeStyles(styles);
+// const useStyles = makeStyles(styles);
 
 export default function WorkingTimer(props) {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   // const [workingItem, setWorkingItem] = React.useState({project: "", startTime: new Date(), endTime: new Date()});
   const [isCounting, setIsCounting] = React.useState(false);
@@ -74,28 +74,32 @@ export default function WorkingTimer(props) {
              </Typography>
             </Grid>
             <Grid item md={2} xs={12}>
-              <Button 
-                fullWidth 
-                variant="outlined" 
-                color="primary" 
-                onClick={handleStartTimerBtn} 
-                className={clsx({
-                  [classes.hidden]: isCounting,
-                })}
-              >
-                start Timer
-              </Button>
-              <Button 
-                fullWidth 
-                variant="outlined" 
-                color="secondary" 
-                onClick={handleStopTimerBtn}
-                className={clsx({
-                  [classes.hidden]: !isCounting,
-                })}
-              >
-                Stop
-              </Button>
+              {
+                !isCounting ?
+                <Button 
+                  fullWidth 
+                  variant="outlined" 
+                  color="primary" 
+                  onClick={handleStartTimerBtn} 
+                  // className={clsx({
+                  //   [classes.hidden]: isCounting,
+                  // })}
+                >
+                  start Timer
+                </Button>
+                :
+                <Button 
+                  fullWidth 
+                  variant="outlined" 
+                  color="secondary" 
+                  onClick={handleStopTimerBtn}
+                  // className={clsx({
+                  //   [classes.hidden]: !isCounting,
+                  // })}
+                >
+                  Stop
+                </Button>
+              }
             </Grid>
           </Grid>
         </form>

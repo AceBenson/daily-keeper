@@ -2,7 +2,7 @@ import React from 'react'
 import { Typography } from '@material-ui/core'
 
 import WorkingTimer from './WorkingTimer';
-import TodayTimeline from './TodayTimeline';
+// import TodayTimeline from './TodayTimeline';
 import TodayList from './TodayList';
 
 const projects = [
@@ -18,6 +18,8 @@ export default function Tracker() {
       project: "",
       startTime: null,
       endTime: null,
+      progress: [],
+      todo: [],
     },
     workingItemList: []
   });
@@ -85,6 +87,28 @@ export default function Tracker() {
     });
   }
 
+  const handleAddProgress = (key, value) => {
+    const newWorkingItemList = [...workingItemAndList.workingItemList];
+
+    newWorkingItemList[key].progress.push(value);
+
+    setWorkingItemAndList({
+      ...workingItemAndList,
+      workingItemList: newWorkingItemList
+    });
+  }
+
+  const handleAddTodo = (key, value) => {
+    const newWorkingItemList = [...workingItemAndList.workingItemList];
+
+    newWorkingItemList[key].todo.push(value);
+
+    setWorkingItemAndList({
+      ...workingItemAndList,
+      workingItemList: newWorkingItemList
+    });
+  }
+
   // const test = () => {
   //   console.log(workingItemAndList);
   // }
@@ -108,10 +132,12 @@ export default function Tracker() {
         workingItemList={workingItemAndList.workingItemList}
         handleStartTimeChange={handleStartTimeChange}
         handleEndTimeChange={handleEndTimeChange}
+        handleAddProgress={handleAddProgress}
+        handleAddTodo={handleAddTodo}
       />
-      <TodayTimeline
+      {/* <TodayTimeline
         workingItemList={workingItemAndList.workingItemList}
-      />
+      /> */}
     </div>
   )
 }
