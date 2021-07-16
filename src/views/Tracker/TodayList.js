@@ -1,10 +1,11 @@
 import React from 'react'
 import { List, makeStyles } from '@material-ui/core';
-import TodayListItem from '../TodayListItem';
+import TodayListItem from './TodayListItem';
 
 const styles = (theme) => ({
   root: {
-    backgroundColor: theme.palette.info.light
+    // backgroundColor: "rgb(0, 0, 0)"
+    // border: "1px solid rgb(0, 0, 0)"
   }
 });
 
@@ -25,6 +26,8 @@ export default function TodayList(props) {
             handleEndTimeChange={props.handleEndTimeChange}
             handleAddProgress={props.handleAddProgress}
             handleAddTodo={props.handleAddTodo}
+            handleDeleteProgress={props.handleDeleteProgress}
+            handleDeleteTodo={props.handleDeleteTodo}
           />
         ))}
       </List>

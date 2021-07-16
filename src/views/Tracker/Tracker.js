@@ -29,7 +29,7 @@ export default function Tracker() {
       ...workingItemAndList, 
       workingItem: {
         ...workingItemAndList.workingItem, 
-        project: event.target.value
+        project: event.target.value,
       }
     });
   };
@@ -52,7 +52,13 @@ export default function Tracker() {
     }
     setWorkingItemAndList({
       ...workingItemAndList,
-      workingItem: newWorkingItem,
+      workingItem: {
+        project: "",
+        startTime: null,
+        endTime: null,
+        progress: [],
+        todo: [],
+      },
       workingItemList: [
         ...workingItemAndList.workingItemList,
         newWorkingItem
@@ -109,6 +115,28 @@ export default function Tracker() {
     });
   }
 
+  const handleDeleteProgress = (key, index) => {
+    const newWorkingItemList = [...workingItemAndList.workingItemList];
+
+    newWorkingItemList[key].progress.splice(index, 1);
+
+    setWorkingItemAndList({
+      ...workingItemAndList,
+      workingItemList: newWorkingItemList
+    });
+  }
+
+  const handleDeleteTodo = (index, key) => {
+    const newWorkingItemList = [...workingItemAndList.workingItemList];
+
+    newWorkingItemList[key].todo.splice(index, 1);
+
+    setWorkingItemAndList({
+      ...workingItemAndList,
+      workingItemList: newWorkingItemList
+    });
+  }
+
   // const test = () => {
   //   console.log(workingItemAndList);
   // }
@@ -134,6 +162,8 @@ export default function Tracker() {
         handleEndTimeChange={handleEndTimeChange}
         handleAddProgress={handleAddProgress}
         handleAddTodo={handleAddTodo}
+        handleDeleteProgress={handleDeleteProgress}
+        handleDeleteTodo={handleDeleteTodo}
       />
       {/* <TodayTimeline
         workingItemList={workingItemAndList.workingItemList}
