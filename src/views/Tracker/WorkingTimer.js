@@ -47,7 +47,7 @@ export default function WorkingTimer(props) {
       <Paper style={{padding: "6px 12px", margin: "12px 0px"}}>
         <form >
           <Grid container spacing={2} alignItems="center">
-            <Grid item md={2} xs={12}>
+            <Grid item md={3} xs={12}>
               <FormControl fullWidth>
                 <InputLabel id="project-label">Project</InputLabel>
                 <Select
@@ -65,7 +65,7 @@ export default function WorkingTimer(props) {
                 <FormHelperText>What project are you working on?</FormHelperText>
               </FormControl>
             </Grid>
-            <Grid item md={6} xs={12}>
+            <Grid item md={5} xs={12}>
 
             </Grid>
             <Grid item md={2} xs={12}>

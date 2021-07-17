@@ -4,7 +4,8 @@ import TodayListItem from './TodayListItem';
 
 const styles = (theme) => ({
   root: {
-    // backgroundColor: "rgb(0, 0, 0)"
+    backgroundColor: "rgb(20, 20, 20)",
+    boxShadow: "10px 5px 5px black"
     // border: "1px solid rgb(0, 0, 0)"
   }
 });

@@ -126,7 +126,7 @@ export default function Tracker() {
     });
   }
 
-  const handleDeleteTodo = (index, key) => {
+  const handleDeleteTodo = (key, index) => {
     const newWorkingItemList = [...workingItemAndList.workingItemList];
 
     newWorkingItemList[key].todo.splice(index, 1);

@@ -49,10 +49,14 @@ export default function TodayListItemCollapse(props) {
           }}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
+              style={{borderBottom: "2mm ridge rgb(100, 200, 0)"}}
             >
               <Typography className={classes.heading}>{panel.name}</Typography>
             </AccordionSummary>
-            <AccordionDetails className={classes.accordionDetails}>
+            <AccordionDetails 
+              className={classes.accordionDetails}
+              style={{border: "1px dashed rgb(100, 200, 0)"}}
+            >
               <TextField 
                 fullWidth
                 inputRef={panel.ref}
@@ -62,7 +66,10 @@ export default function TodayListItemCollapse(props) {
                 <SendIcon/>
               </Button>
             </AccordionDetails>
-            <AccordionDetails className={classes.accordionDetails}>
+            <AccordionDetails 
+              className={classes.accordionDetails}
+              // style={{borderLeft: "2px solid rgb(100, 100, 0)"}}
+            >
               <List style={{width: '100%'}}>
                 {panel.items.map((value, key) => (
                   <ListItem key={key} style={{justifyContent:'center'}}>
