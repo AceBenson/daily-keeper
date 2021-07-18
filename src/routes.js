@@ -7,7 +7,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import Tracker from './views/Tracker/Tracker'
 import Calendar from './views/Calendar'
 import Dashboard from './views/Dashboard'
-import Project from './views/Project'
+import Project from './views/Project/Project'
 import Setting from './views/Setting'
 
 const routes = [
