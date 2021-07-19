@@ -25,10 +25,8 @@ export default function TodayList(props) {
             index={key}
             handleStartTimeChange={props.handleStartTimeChange}
             handleEndTimeChange={props.handleEndTimeChange}
-            handleAddProgress={props.handleAddProgress}
-            handleAddTodo={props.handleAddTodo}
-            handleDeleteProgress={props.handleDeleteProgress}
-            handleDeleteTodo={props.handleDeleteTodo}
+            handleEditProgress={props.handleEditProgress}
+            handleEditTodo={props.handleEditTodo}
           />
         ))}
       </List>

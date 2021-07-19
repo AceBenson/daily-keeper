@@ -1,10 +1,9 @@
 import React from 'react'
-import { List, ListItem, ListItemIcon, ListItemText, ListItemSecondaryAction, Grid, FormControl, IconButton, Typography, TextField, Collapse, Button, Accordion, AccordionSummary, AccordionDetails, /*AccordionActions, Divider,*/ makeStyles} from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import SendIcon from '@material-ui/icons/Send';
-import DeleteIcon from '@material-ui/icons/Delete';
-import AddIcon from '@material-ui/icons/Add';
-// import Green from "@material-ui/core/colors/green";
+import { Typography, TextField, Collapse, makeStyles} from '@material-ui/core';
+
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+
 
 const styles = (theme) => ({
   expanded: {},
@@ -21,6 +20,9 @@ const styles = (theme) => ({
     fontSize: theme.typography.pxToRem(18),
     width: "120px"
   },
+  detail: {
+    fontSize: "16px"
+  },
   accordion: {
     paddingLeft: "20px"
   },
@@ -34,93 +36,37 @@ const useStyles = makeStyles(styles);
 export default function TodayListItemCollapse(props) {
   const classes = useStyles();
 
-  const [openProgress, setOpenProgress] = React.useState(false);
-  const [openTodo, setOpenTodo] = React.useState(false);
-
-  const progressInput = React.useRef("");
-  const todoInput = React.useRef("");
-
-  const handleSend = (panel) => {
-    if (panel.ref.current.value) {
-      panel.setOpen(true);
-      panel.handleSend(props.index, panel.ref.current.value); 
-      panel.ref.current.value = "";
-    }
-  }
-
   return (
     <div>
       <Collapse in={props.open} timeout="auto" unmountOnExit>
-        {[
-          {"name": "Progress", "handleSend": props.handleAddProgress, "handleDelte": props.handleDeleteProgress, "ref": progressInput, "items": props.item.progress, "open": openProgress, "setOpen": setOpenProgress}, 
-          {"name": "Todo", "handleSend": props.handleAddTodo, "handleDelte": props.handleDeleteTodo, "ref": todoInput, "items": props.item.todo, "open": openTodo, "setOpen": setOpenTodo}
-        ].map((panel, key) => (
-          <Accordion 
-            key={key} 
-            expanded={panel.open}
-            onChange={() => {panel.setOpen(!panel.open)}}
-            className={classes.accordion} 
-            classes={{
-              root: classes.root,
-              expanded: classes.expanded
-            }}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              // style={{borderBottom: "2mm ridge rgb(100, 200, 0)"}}
-            >
-              <Typography className={classes.heading}>{panel.name}</Typography>
-              <FormControl
+        {
+          [
+            {
+              "name": "Progress",
+              "content": props.item.progress,
+              "editContent": props.handleEditProgress,
+              "icon": <CheckCircleIcon style={{marginRight: "5px"}} />, 
+            }, 
+            {
+              "name": "Todo",
+              "content": props.item.todo,
+              "editContent": props.handleEditTodo,
+              "icon": <CheckCircleOutlineIcon style={{marginRight: "5px"}} />, 
+            }
+          ].map((detail, key) => (
+            <div key={key} style={{margin: "20px", display: "flex", alignItems: "center"}} wrap='nowrap'>
+              {detail.icon}
+              <Typography className={classes.heading}>
+                {detail.name}
+              </Typography>
+              <TextField 
                 fullWidth
-                onClick={(event) => event.stopPropagation()}
-              >
-                <Grid container>
-                  <Grid item xs={11}>
-                    <TextField 
-                      fullWidth
-                      inputRef={panel.ref}
-                      // inputProps={{style: { textAlign: 'center' }}}
-                    />
-                  </Grid>
-                  <Grid item xs={1}>
-                    <Button onClick={() => {handleSend(panel);}}>
-                      <SendIcon/>
-                    </Button>
-                  </Grid>
-                </Grid>
-              </FormControl>
-            </AccordionSummary>
-            <AccordionDetails 
-              className={classes.accordionDetails}
-              // style={{borderLeft: "2px solid rgb(100, 100, 0)"}}
-            >
-              <List style={{width: '100%'}}>
-                {panel.items.map((value, key) => (
-                  <ListItem key={key}>
-                    <ListItemIcon>
-                      <AddIcon />
-                    </ListItemIcon>
-                    <ListItemText>
-                      {value}
-                    </ListItemText>
-                    <ListItemSecondaryAction>
-                      <IconButton edge="end" aria-label="delete" onClick={() => panel.handleDelte(props.index, key)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                ))}
-              </List>
-            </AccordionDetails>
-
-            {/* <Divider />
-            
-            <AccordionActions>
-              <Button size="small">Cancel</Button>
-              <Button size="small" color="primary">Save</Button>
-            </AccordionActions> */}
-          </Accordion>
-        ))}
+                value={detail.content}
+                onChange={event => detail.editContent(props.index, event.target.value)}
+              />
+            </div>
+          ))
+        }
       </Collapse>
     </div>
   )

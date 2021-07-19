@@ -73,10 +73,8 @@ export default function TodayListItem(props) {
       </ListItem>
       <TodayListItemCollapse 
         open={open}
-        handleAddProgress={props.handleAddProgress}
-        handleAddTodo={props.handleAddTodo}
-        handleDeleteProgress={props.handleDeleteProgress}
-        handleDeleteTodo={props.handleDeleteTodo}
+        handleEditProgress={props.handleEditProgress}
+        handleEditTodo={props.handleEditTodo}
         item={props.item}
         index={props.index}
       />

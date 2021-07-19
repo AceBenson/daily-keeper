@@ -18,8 +18,8 @@ export default function Tracker() {
       project: "",
       startTime: null,
       endTime: null,
-      progress: [],
-      todo: [],
+      progress: "",
+      todo: "",
     },
     workingItemList: []
   });
@@ -56,8 +56,8 @@ export default function Tracker() {
         project: "",
         startTime: null,
         endTime: null,
-        progress: [],
-        todo: [],
+        progress: "",
+        todo: "",
       },
       workingItemList: [
         ...workingItemAndList.workingItemList,
@@ -93,10 +93,10 @@ export default function Tracker() {
     });
   }
 
-  const handleAddProgress = (key, value) => {
+  const handleEditProgress = (key, value) => {
     const newWorkingItemList = [...workingItemAndList.workingItemList];
 
-    newWorkingItemList[key].progress.push(value);
+    newWorkingItemList[key].progress = value;
 
     setWorkingItemAndList({
       ...workingItemAndList,
@@ -104,42 +104,16 @@ export default function Tracker() {
     });
   }
 
-  const handleAddTodo = (key, value) => {
+  const handleEditTodo = (key, value) => {
     const newWorkingItemList = [...workingItemAndList.workingItemList];
 
-    newWorkingItemList[key].todo.push(value);
+    newWorkingItemList[key].todo = value;
 
     setWorkingItemAndList({
       ...workingItemAndList,
       workingItemList: newWorkingItemList
     });
   }
-
-  const handleDeleteProgress = (key, index) => {
-    const newWorkingItemList = [...workingItemAndList.workingItemList];
-
-    newWorkingItemList[key].progress.splice(index, 1);
-
-    setWorkingItemAndList({
-      ...workingItemAndList,
-      workingItemList: newWorkingItemList
-    });
-  }
-
-  const handleDeleteTodo = (key, index) => {
-    const newWorkingItemList = [...workingItemAndList.workingItemList];
-
-    newWorkingItemList[key].todo.splice(index, 1);
-
-    setWorkingItemAndList({
-      ...workingItemAndList,
-      workingItemList: newWorkingItemList
-    });
-  }
-
-  // const test = () => {
-  //   console.log(workingItemAndList);
-  // }
 
   return (
     <div>
@@ -150,9 +124,6 @@ export default function Tracker() {
         handleStartTimerBtn={handleStartTimerBtn}
         handleStopTimerBtn={handleStopTimerBtn}
       />
-      {/* <Button onClick={test}>
-        Test
-      </Button> */}
       <Typography variant="h5" style={{margin: "50px 0px"}}>
         Today
       </Typography>
@@ -160,14 +131,9 @@ export default function Tracker() {
         workingItemList={workingItemAndList.workingItemList}
         handleStartTimeChange={handleStartTimeChange}
         handleEndTimeChange={handleEndTimeChange}
-        handleAddProgress={handleAddProgress}
-        handleAddTodo={handleAddTodo}
-        handleDeleteProgress={handleDeleteProgress}
-        handleDeleteTodo={handleDeleteTodo}
+        handleEditProgress={handleEditProgress}
+        handleEditTodo={handleEditTodo}
       />
-      {/* <TodayTimeline
-        workingItemList={workingItemAndList.workingItemList}
-      /> */}
     </div>
   )
 }
