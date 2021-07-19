@@ -1,14 +1,20 @@
 import React from 'react'
 import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button } from '@material-ui/core';
+import { BlockPicker } from 'react-color'
 
 export default function ProjectCreateDialog(props) {
   const projectName = React.useRef("");
-  const projectColor = React.useRef("");
+  // const projectColor = React.useRef("");
+  const [projectColor, setProjectColor] = React.useState("#000000");
 
   const handleCreate = () => {
     console.log("handleCreate");
-    props.createProject(projectName.current.value, projectColor.current.value);
+    props.createProject(projectName.current.value, projectColor);
     props.handleClose();
+  }
+
+  const handleChangeColor = (color) => {
+    setProjectColor(color.hex);
   }
 
   return (
@@ -18,8 +24,19 @@ export default function ProjectCreateDialog(props) {
         {/* <DialogContentText>
           
         </DialogContentText> */}
-        <TextField inputRef={projectName} autoFocus margin="dense" label="Project Name" fullWidth/>
-        <TextField inputRef={projectColor} margin="dense" label="Color" fullWidth/>
+        <TextField 
+          inputRef={projectName} 
+          autoFocus 
+          margin="dense" 
+          label="Project Name" 
+          fullWidth
+        />
+        <BlockPicker 
+          triangle="hide"
+          width="100%"
+          color={projectColor}
+          onChangeComplete={ handleChangeColor }
+        />
       </DialogContent>
 
       <DialogActions>

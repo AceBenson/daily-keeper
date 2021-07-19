@@ -18,6 +18,12 @@ const routes = [
     component: Tracker,
   },
   {
+    path: "/project",
+    name: "PROJECT",
+    icon: PostAddIcon,
+    component: Project,
+  },
+  {
     path: "/calendar",
     name: "CALENDAR",
     icon: CalendarTodayIcon,
@@ -28,12 +34,6 @@ const routes = [
     name: "DASHBOARD",
     icon: DashboardIcon,
     component: Dashboard,
-  },
-  {
-    path: "/project",
-    name: "PROJECT",
-    icon: PostAddIcon,
-    component: Project,
   },
   {
     path: "/setting",

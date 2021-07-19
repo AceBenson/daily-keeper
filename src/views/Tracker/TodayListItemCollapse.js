@@ -6,15 +6,18 @@ import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 
 
 const styles = (theme) => ({
-  expanded: {},
-  root: {
-    width: '100%', 
-    // backgroundColor: theme.palette.action.disabled,
-    // margin: 0,
-    "&$expanded": {
-      margin: 0,
-      // backgroundColor: theme.palette.action.disabled,
-    }
+  // expanded: {},
+  // root: {
+  //   width: '100%', 
+  //   // backgroundColor: theme.palette.action.disabled,
+  //   // margin: 0,
+  //   "&$expanded": {
+  //     margin: 0,
+  //     // backgroundColor: theme.palette.action.disabled,
+  //   }
+  // },
+  collapse: {
+    backgroundColor: theme.palette.background.paper
   },
   heading: {
     fontSize: theme.typography.pxToRem(18),
@@ -23,12 +26,6 @@ const styles = (theme) => ({
   detail: {
     fontSize: "16px"
   },
-  accordion: {
-    paddingLeft: "20px"
-  },
-  accordionDetails: {
-    // paddingLeft: "40px"
-  }
 });
 
 const useStyles = makeStyles(styles);
@@ -38,7 +35,7 @@ export default function TodayListItemCollapse(props) {
 
   return (
     <div>
-      <Collapse in={props.open} timeout="auto" unmountOnExit>
+      <Collapse in={props.open} timeout="auto" unmountOnExit className={classes.collapse}>
         {
           [
             {

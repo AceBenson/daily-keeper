@@ -21,14 +21,15 @@ function createData(name, color, tracked, status) {
 }
 
 const rows = [
-  createData('Course', 'rgb(255, 0, 0)', 156.1, "In Progress"),
-  createData('Web', 'rgb(0, 255, 0)', 30.3, "Not Started"),
-  createData('Machine Learning', 'rgb(0, 0, 255)', 300, "Completed"),
+  createData('Course', '#ff0000', 156.1, "In Progress"),
+  createData('Web', '#00ff00', 30.3, "Not Started"),
+  createData('Machine Learning', '#0000ff', 300, "Completed"),
 ]
 
 export default function Project() {
   const [openCrate, setOpenCreate] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
+  const [selectedIdx, setSelectedIdx] = React.useState(-1);
 
   const handleCreateOpen = () => {
     setOpenCreate(true);
@@ -51,7 +52,15 @@ export default function Project() {
   }
 
   const editProject = (name, color) => {
+    rows[selectedIdx].name = name;
+    rows[selectedIdx].color = color;
+  }
 
+  const handleClick = (index) => {
+    if (index === selectedIdx)
+      setSelectedIdx(-1);
+    else
+      setSelectedIdx(index);
   }
 
   return (
@@ -71,8 +80,14 @@ export default function Project() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <ProjectRow key={row.name} row={row} />
+            {rows.map((row, index) => (
+              <ProjectRow 
+                key={row.name}
+                row={row}
+                index={index}
+                selectedIdx={selectedIdx}
+                handleClick={handleClick} 
+              />
             ))}
           </TableBody>
         </Table>
@@ -87,12 +102,15 @@ export default function Project() {
         </Fab>
       </Tooltip>
       <Tooltip title="Edit">
-        <Fab 
-          style={{float: "right", margin: "20px 20px 0px 0px"}}
-          onClick={handleEditOpen}
-        >
-          <EditIcon />
-        </Fab>
+        <span>
+          <Fab
+            disabled={selectedIdx === -1}
+            style={{float: "right", margin: "20px 20px 0px 0px"}}
+            onClick={handleEditOpen}
+          >
+            <EditIcon />
+          </Fab>
+        </span>
       </Tooltip>
       <ProjectCreateDialog 
         open={openCrate}
@@ -103,6 +121,8 @@ export default function Project() {
         open={openEdit}
         handleClose={handleEditClose}
         editProject={editProject}
+        name={selectedIdx === -1 ? "" : rows[selectedIdx].name}
+        color={selectedIdx === -1 ? "" : rows[selectedIdx].color}
       />
     </div>
   )
