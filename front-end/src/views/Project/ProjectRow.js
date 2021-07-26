@@ -14,9 +14,16 @@ const useStyles = makeStyles(styles);
 
 
 export default function ProjectRow(props) {
-  const { row } = props;
+  const { project } = props;
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  const [history, setHistory] = React.useState([]);
+
+  React.useEffect(() => {
+    fetch("/api/project/"+project._id)
+      .then((res) => res.json())
+      .then((data) => setHistory(data.history));
+  }, []);
 
   const handleClick = () => {
     props.handleClick(props.index);
@@ -35,16 +42,16 @@ export default function ProjectRow(props) {
           </IconButton>
         </TableCell>
         <TableCell component="th" scope="row">
-          {row.name}
+          {project.name}
         </TableCell>
         <TableCell align="right">
           <div style={{padding: "2px", float: "right", width: "24px", height: "24px" ,backgroundColor: "white"}}>
-            <div style={{ width: "20px", height: "20px", backgroundColor: row.color}}>
+            <div style={{ width: "20px", height: "20px", backgroundColor: project.color}}>
             </div>
           </div>
         </TableCell>
-        <TableCell align="right">{row.tracked}h</TableCell>
-        <TableCell align="right">{row.status}</TableCell>
+        <TableCell align="right">{project.tracked}h</TableCell>
+        <TableCell align="right">{project.status}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={5}>
@@ -56,17 +63,17 @@ export default function ProjectRow(props) {
               <Table size="small">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Date</TableCell>
-                    <TableCell>Time</TableCell>
-                    <TableCell style={{width: "40%"}}>Progress</TableCell>
-                    <TableCell style={{width: "40%"}}>To-do</TableCell>
+                    <TableCell>Start Time</TableCell>
+                    <TableCell>End Time</TableCell>
+                    <TableCell style={{width: "25%"}}>Progress</TableCell>
+                    <TableCell style={{width: "25%"}}>To-do</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.history.map((historyRow, key) => (
+                  {history.map((historyRow, key) => (
                     <TableRow key={key}>
-                      <TableCell>{historyRow.date}</TableCell>
-                      <TableCell>{historyRow.elapsedTime}</TableCell>
+                      <TableCell>{historyRow.start_time}</TableCell>
+                      <TableCell>{historyRow.end_time}</TableCell>
                       <TableCell>{historyRow.progress}</TableCell>
                       <TableCell>{historyRow.todo}</TableCell>
                     </TableRow>

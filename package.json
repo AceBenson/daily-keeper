@@ -19,7 +19,9 @@
   },
   "homepage": "https://github.com/AceBenson/daily-keeper#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "async": "^3.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.13.3"
   },
   "engines": {
     "node": "12.18.2"

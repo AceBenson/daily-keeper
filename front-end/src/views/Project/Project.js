@@ -7,29 +7,38 @@ import ProjectRow from './ProjectRow'
 import ProjectCreateDialog from './ProjectCreateDialog';
 import ProjectEditDialog from './ProjectEditDialog';
 
-function createData(name, color, tracked, status) {
-  return {
-    name,
-    color,
-    tracked,
-    status,
-    history: [
-      { date: '2020-01-02', elapsedTime: '02:45:35', progress: "Build a basic skeleton", todo: "Generate something" },
-      { date: '2020-01-05', elapsedTime: '01:20:15', progress: "Create a new table", todo: "Test"},
-    ],
-  };
-}
+// function createData(name, color, tracked, status) {
+//   return {
+//     name,
+//     color,
+//     tracked,
+//     status,
+//     history: [
+//       { date: '2020-01-02', elapsedTime: '02:45:35', progress: "Build a basic skeleton", todo: "Generate something" },
+//       { date: '2020-01-05', elapsedTime: '01:20:15', progress: "Create a new table", todo: "Test"},
+//     ],
+//   };
+// }
 
-const rows = [
-  createData('Course', '#ff0000', 156.1, "In Progress"),
-  createData('Web', '#00ff00', 30.3, "Not Started"),
-  createData('Machine Learning', '#0000ff', 300, "Completed"),
-]
+// const rows = [
+//   createData('Course', '#ff0000', 156.1, "In Progress"),
+//   createData('Web', '#00ff00', 30.3, "Not Started"),
+//   createData('Machine Learning', '#0000ff', 300, "Completed"),
+// ]
 
 export default function Project() {
   const [openCrate, setOpenCreate] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [selectedIdx, setSelectedIdx] = React.useState(-1);
+
+  const [projects, setProjects] = React.useState([]);
+
+  React.useEffect(() => {
+    fetch("/api/projects")
+      .then((res) => res.json())
+      .then((data) => setProjects(data));
+  }, []);
+
 
   const handleCreateOpen = () => {
     setOpenCreate(true);
@@ -48,12 +57,14 @@ export default function Project() {
   };
 
   const createProject = (name, color) => {
-    rows.push(createData(name, color, 0, "Not Started"));
+    // rows.push(createData(name, color, 0, "Not Started"));
+    console.warn("Todo: Create project");
   }
 
   const editProject = (name, color) => {
-    rows[selectedIdx].name = name;
-    rows[selectedIdx].color = color;
+    // rows[selectedIdx].name = name;
+    // rows[selectedIdx].color = color;
+    console.warn("Todo: Edit project");
   }
 
   const handleClick = (index) => {
@@ -80,10 +91,10 @@ export default function Project() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, index) => (
+            {projects && projects.map((project, index) => (
               <ProjectRow 
-                key={row.name}
-                row={row}
+                key={project.name}
+                project={project}
                 index={index}
                 selectedIdx={selectedIdx}
                 handleClick={handleClick} 
@@ -121,8 +132,8 @@ export default function Project() {
         open={openEdit}
         handleClose={handleEditClose}
         editProject={editProject}
-        name={selectedIdx === -1 ? "" : rows[selectedIdx].name}
-        color={selectedIdx === -1 ? "" : rows[selectedIdx].color}
+        name={selectedIdx === -1 ? "" : projects[selectedIdx].name}
+        color={selectedIdx === -1 ? "" : projects[selectedIdx].color}
       />
     </div>
   )

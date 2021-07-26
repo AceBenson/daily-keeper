@@ -39,13 +39,13 @@ const switchRoutes = (
 export default function MainLayout() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const [data, setData] = React.useState(null);
+  // const [data, setData] = React.useState(null);
 
-  React.useEffect(() => {
-    fetch("/api")
-      .then((res) => res.json())
-      .then((data) => setData(data.message));
-  }, []);
+  // React.useEffect(() => {
+  //   fetch("/api")
+  //     .then((res) => res.json())
+  //     .then((data) => setData(data.message));
+  // }, []);
 
   const handleDrawerOpen = () => {
     setOpen(!open);
@@ -58,7 +58,7 @@ export default function MainLayout() {
       <Sidebar routes={routes} open={open} />
       <div className={classes.content}>
         <Toolbar /> {/* Use Toolbar as margin control */}
-        <p>{data? data : "Daily keeper from Client"}</p>
+        {/* <p>{data? data : "Daily keeper from Client"}</p> */}
         {switchRoutes}
       </div>
     </div>

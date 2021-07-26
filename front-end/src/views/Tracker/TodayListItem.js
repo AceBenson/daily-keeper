@@ -13,7 +13,7 @@ export default function TodayListItem(props) {
 
   return (
     <div>
-      <ListItem button onClick={handleClick}>
+      <ListItem button onClick={handleClick} style={{borderLeft: "2px solid rgb(255, 0, 0)"}}>
         <Grid container alignItems="center">
           <Grid item md={2} xs={12}>
             <Typography variant="h6">
@@ -48,6 +48,7 @@ export default function TodayListItem(props) {
                 step: 1,
               }}
               onChange={(e) => {props.handleStartTimeChange(props.index, e.target.value);}}
+              onClick={(e) => {e.stopPropagation();}}
             />
           </Grid>
           <Grid item md={2} xs={12} align="center">
@@ -66,6 +67,7 @@ export default function TodayListItem(props) {
                 step: 1,
               }}
               onChange={(e) => {props.handleEndTimeChange(props.index, e.target.value);}}
+              onClick={(e) => {e.stopPropagation();}}
             />
           </Grid>
         </Grid>

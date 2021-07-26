@@ -2,8 +2,8 @@ import React from 'react'
 import { Typography } from '@material-ui/core'
 
 import WorkingTimer from './WorkingTimer';
-// import TodayTimeline from './TodayTimeline';
 import TodayList from './TodayList';
+import MySnackbar from './MySnackbar';
 
 const projects = [
   "Course",
@@ -12,6 +12,16 @@ const projects = [
 ];
 
 export default function Tracker() {
+  const [open, setOpen] = React.useState(false);
+  const [info, setInfo] = React.useState("");
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
 
   const [workingItemAndList, setWorkingItemAndList] = React.useState({
     workingItem: {
@@ -64,6 +74,9 @@ export default function Tracker() {
         newWorkingItem
       ]
     });
+
+    setInfo("Working item entry has been created.");
+    setOpen(true);
   };
 
   const handleStartTimeChange = (key, value) => {
@@ -77,6 +90,9 @@ export default function Tracker() {
       ...workingItemAndList,
       workingItemList: newWorkingItemList
     });
+
+    setInfo("Update start time successfully.");
+    setOpen(true);
   }
 
   const handleEndTimeChange = (key, value) => {
@@ -91,6 +107,9 @@ export default function Tracker() {
       ...workingItemAndList,
       workingItemList: newWorkingItemList
     });
+
+    setInfo("Update end time successfully.");
+    setOpen(true);
   }
 
   const handleEditProgress = (key, value) => {
@@ -102,6 +121,9 @@ export default function Tracker() {
       ...workingItemAndList,
       workingItemList: newWorkingItemList
     });
+
+    setInfo("Update progress successfully.");
+    setOpen(true);
   }
 
   const handleEditTodo = (key, value) => {
@@ -113,6 +135,9 @@ export default function Tracker() {
       ...workingItemAndList,
       workingItemList: newWorkingItemList
     });
+
+    setInfo("Update todo successfully.");
+    setOpen(true);
   }
 
   return (
@@ -133,6 +158,11 @@ export default function Tracker() {
         handleEndTimeChange={handleEndTimeChange}
         handleEditProgress={handleEditProgress}
         handleEditTodo={handleEditTodo}
+      />
+      <MySnackbar
+        open={open}
+        handleClose={handleClose}
+        info={info}
       />
     </div>
   )

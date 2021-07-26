@@ -4,7 +4,7 @@ import { Typography, makeStyles } from '@material-ui/core'
 
 const styles = (theme) => ({
   wrapper: {
-    padding: "40px 0px"
+    paddingBottom: "40px"
   },
 
   table: {
@@ -74,7 +74,7 @@ const styles = (theme) => ({
     position: "absolute",
     width: "98%",
     backgroundColor: "rgb(100, 100, 100)",
-
+    
     // top: "130px",
     // height: "elapsed",
     // borderLeft: "2px solid red",
@@ -96,7 +96,6 @@ export default function Calendar() {
     fetch("/api/getDayEvent")
       .then((res) => res.json())
       .then((todayEvents) => {
-        console.log(todayEvents);
         setTodayEvents(todayEvents);
       })
       .catch((err) => console.log(err));
@@ -104,8 +103,8 @@ export default function Calendar() {
 
   return (
     <div className={classes.wrapper}>
-      <Typography variant="h4">
-        h4. Calendar
+      <Typography variant="h4" style={{margin: "20px"}}>
+        Calendar
       </Typography>
       <div className={classes.table}>
 
@@ -149,6 +148,7 @@ export default function Calendar() {
                       height: event.elapsedTime/1000/60,
                       top: 60 + new Date(event.startTime).getHours() * 60 + new Date(event.startTime).getMinutes(),
                       borderLeft: "3px solid " + event.color,
+                      // backgroundColor: event.color.replace(')', ', 0.3)').replace('rgb', 'rgba')
                     }}
                   >
                     {event.project}
