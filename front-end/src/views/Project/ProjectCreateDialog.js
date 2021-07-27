@@ -2,13 +2,20 @@ import React from 'react'
 import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button } from '@material-ui/core';
 import { BlockPicker } from 'react-color'
 
+import { create_project } from '../../api/projectAPI';
+
 export default function ProjectCreateDialog(props) {
   const projectName = React.useRef("");
   // const projectColor = React.useRef("");
   const [projectColor, setProjectColor] = React.useState("#000000");
 
-  const handleCreate = () => {
-    console.log("handleCreate");
+  const handleCreate = async () => {
+    const data = {name: projectName.current.value, color: projectColor};
+    const res = await create_project(data);
+    if (res.status === 200) {
+      console.log("It's time to create snackbar");
+    }
+
     props.createProject(projectName.current.value, projectColor);
     props.handleClose();
   }

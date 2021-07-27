@@ -20,10 +20,11 @@ export default function ProjectRow(props) {
   const [history, setHistory] = React.useState([]);
 
   React.useEffect(() => {
+    // console.table(project);
     fetch("/api/project/"+project._id)
       .then((res) => res.json())
       .then((data) => setHistory(data.history));
-  }, []);
+  }, [project._id]);
 
   const handleClick = () => {
     props.handleClick(props.index);
