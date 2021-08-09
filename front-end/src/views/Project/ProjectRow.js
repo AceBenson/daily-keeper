@@ -4,6 +4,8 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 // import { BlockPicker } from 'react-color'
 
+import { read_project_detail } from '../../api/projectAPI';
+
 const styles = (theme) => ({
   box: {
     background: "linear-gradient(#303030, #424242)"
@@ -21,9 +23,14 @@ export default function ProjectRow(props) {
 
   React.useEffect(() => {
     // console.table(project);
-    fetch("/api/project/"+project._id)
-      .then((res) => res.json())
-      .then((data) => setHistory(data.history));
+    // fetch("/api/project/"+project._id)
+    //   .then((res) => res.json())
+    //   .then((data) => {setHistory(data.history)});
+    async function fetchData() {
+      const res = await read_project_detail(project._id);
+      setHistory(res.data.history);
+    }
+    fetchData();
   }, [project._id]);
 
   const handleClick = () => {
@@ -64,8 +71,8 @@ export default function ProjectRow(props) {
               <Table size="small">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Start Time</TableCell>
-                    <TableCell>End Time</TableCell>
+                    <TableCell>Date</TableCell>
+                    <TableCell>Elapsed Time</TableCell>
                     <TableCell style={{width: "25%"}}>Progress</TableCell>
                     <TableCell style={{width: "25%"}}>To-do</TableCell>
                   </TableRow>
@@ -74,7 +81,7 @@ export default function ProjectRow(props) {
                   {history.map((historyRow, key) => (
                     <TableRow key={key}>
                       <TableCell>{historyRow.start_time}</TableCell>
-                      <TableCell>{historyRow.end_time}</TableCell>
+                      <TableCell>{historyRow.elapsed_time}</TableCell>
                       <TableCell>{historyRow.progress}</TableCell>
                       <TableCell>{historyRow.todo}</TableCell>
                     </TableRow>

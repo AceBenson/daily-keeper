@@ -1,7 +1,4 @@
 var async = require('async')
-// const { body,validationResult } = require('express-validator/check');
-// const { sanitizeBody } = require('express-validator/filter');
-
 
 var Project = require('../models/project');
 var WorkingItem = require('../models/workingitem');
@@ -16,20 +13,18 @@ exports.project_list = function(req, res, next) {
 };
 
 exports.project_detail = function(req, res) {
-  // res.send('NOT IMPLEMENTED: Project detail: ' + req.params.id);
-  // console.log("PROJECT DETAIL");
   async.parallel({
     project: function (callback) {
       Project.findById(req.params.id)
         .exec(callback);
     },
     history: function (callback) {
-      WorkingItem.find({'project': req.params.id}, "start_time end_time elapsed_time progress todo")
+      WorkingItem.find({'project': req.params.id})
         .exec(callback);
     }
   }, function (err, results) {
     if (err) { return next(err); }
-
+    
     res.json(results);
   });
 };
@@ -40,9 +35,6 @@ exports.project_create_get = function(req, res) {
 };
 
 exports.project_create_post = (req, res) => {
-  console.log(`name: ${req.body.name}`);
-  console.log(`color: ${req.body.color}`);
-
   var project = new Project({
     name: req.body.name,
     color: req.body.color,
@@ -58,38 +50,28 @@ exports.project_create_post = (req, res) => {
     }
     console.log("Create project success: ", project);
     res.send("Success");
+
+    // Maybe I can send [project] so I don't need to fetch whole project list
   });
 }
-
-// exports.project_create_post = [
-//   body('name', 'Project name required').isLength({min: 1}).trim(),
-//   sanitizeBody('name').trim().escape(),
-//   (req, res, next) => {
-//     const errors = validationResult(req);
-//     console.log(req);
-//     var project = new Project(
-//       { name: req.body.name }
-//     )
-
-//     if (!errors.isEmpty()) {
-//       console.error("Something is wrong when creating project.");
-//       return;
-//     }
-//     else {
-//       console.log("save~");
-//       // project.save(function (err) {
-//       //   if (err) return next(err);
-//       // });
-//     }
-//   }
-// ];
 
 exports.project_delete_get = function(req, res) {
   res.send('NOT IMPLEMENTED: Project delete GET');
 };
 
 exports.project_delete_post = function(req, res) {
-  res.send('NOT IMPLEMENTED: Project delete POST');
+
+  // Todo: Check workingItem belongs to this project
+
+  Project.findByIdAndRemove(req.params.id, function (err) {
+    if (err) {
+      console.log("Error: ", err);
+      res.send("Fail");
+      return
+    }
+    console.log("Delete project success");
+    res.send("success");
+  });
 };
 
 exports.project_update_get = function(req, res) {
@@ -97,5 +79,21 @@ exports.project_update_get = function(req, res) {
 };
 
 exports.project_update_post = function(req, res) {
-  res.send('NOT IMPLEMENTED: Project update POST');
+  var project = {
+    name: req.body.name,
+    color: req.body.color,
+  };
+
+  // Todo: Check if they are the same.
+
+  Project.findByIdAndUpdate(req.params.id, project, {}, function (err) {
+    if (err) {
+      console.log("Error: ", err);
+      res.send("Fail");
+      return
+    }
+    console.log("Update project success: ", project);
+    res.send("Success");
+  });
+
 };

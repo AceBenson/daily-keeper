@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
+const opts = { toJSON: { virtuals: true }, toObject: { virtuals: true } };
+
 const WorkingItemSchema = new Schema(
   {
     project: {type: Schema.Types.ObjectId, ref: 'Project', required: true},
@@ -9,7 +11,7 @@ const WorkingItemSchema = new Schema(
     end_time: {type: Date, required: true},
     progress: {type: String},
     todo: {type: String},
-  }
+  }, opts
 );
 
 WorkingItemSchema

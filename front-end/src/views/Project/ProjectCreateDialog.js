@@ -14,9 +14,8 @@ export default function ProjectCreateDialog(props) {
     const res = await create_project(data);
     if (res.status === 200) {
       console.log("It's time to create snackbar");
+      props.createProject();
     }
-
-    props.createProject(projectName.current.value, projectColor);
     props.handleClose();
   }
 
