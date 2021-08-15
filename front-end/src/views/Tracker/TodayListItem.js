@@ -3,6 +3,7 @@ import { ListItem, Typography, Grid, TextField, Divider} from '@material-ui/core
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TodayListItemCollapse from './TodayListItemCollapse'
+import {intervalToDuration  } from 'date-fns'
 
 export default function TodayListItem(props) {
   const [open, setOpen] = React.useState(false);
@@ -13,11 +14,11 @@ export default function TodayListItem(props) {
 
   return (
     <div>
-      <ListItem button onClick={handleClick} style={{borderLeft: "2px solid rgb(255, 0, 0)"}}>
+      <ListItem button onClick={handleClick} style={{borderLeft: "2px solid "+props.item.project.color}}>
         <Grid container alignItems="center">
           <Grid item md={2} xs={12}>
             <Typography variant="h6">
-              {props.item.project}
+              {props.item.project.name}
             </Typography>
           </Grid>
           <Grid item md={4} xs={12}>
@@ -26,9 +27,10 @@ export default function TodayListItem(props) {
           <Grid item md={2} xs={12} align="center">
             <Typography variant="h6">
               {
-                ('0'+(props.item.endTime.getHours()-props.item.startTime.getHours())).slice(-2) + ":" +
-                ('0'+(props.item.endTime.getMinutes()-props.item.startTime.getMinutes())).slice(-2) + ":" +
-                ('0'+(props.item.endTime.getSeconds()-props.item.startTime.getSeconds())).slice(-2)
+                Object.entries(intervalToDuration({
+                  start: props.item.start_time, 
+                  end: props.item.end_time
+                })).map((data, index) => {return data[1] !== 0 && (('0'+data[1]).slice(-2) + (index === 5 ? "" : ":"))})
               }
             </Typography>
           </Grid>
@@ -37,9 +39,9 @@ export default function TodayListItem(props) {
               label="Start Time"
               type="time"
               defaultValue={
-                ('0'+props.item.startTime.getHours()).slice(-2) + ":" +
-                ('0'+props.item.startTime.getMinutes()).slice(-2) + ":" +
-                ('0'+props.item.startTime.getSeconds()).slice(-2)
+                ('0'+props.item.start_time.getHours()).slice(-2) + ":" +
+                ('0'+props.item.start_time.getMinutes()).slice(-2) + ":" +
+                ('0'+props.item.start_time.getSeconds()).slice(-2)
               }
               InputLabelProps={{
                 shrink: true,
@@ -56,9 +58,9 @@ export default function TodayListItem(props) {
               label="End Time"
               type="time"
               defaultValue={
-                ('0'+props.item.endTime.getHours()).slice(-2) + ":" +
-                ('0'+props.item.endTime.getMinutes()).slice(-2) + ":" +
-                ('0'+props.item.endTime.getSeconds()).slice(-2)
+                ('0'+props.item.end_time.getHours()).slice(-2) + ":" +
+                ('0'+props.item.end_time.getMinutes()).slice(-2) + ":" +
+                ('0'+props.item.end_time.getSeconds()).slice(-2)
               }
               InputLabelProps={{
                 shrink: true,
@@ -77,6 +79,8 @@ export default function TodayListItem(props) {
         open={open}
         handleEditProgress={props.handleEditProgress}
         handleEditTodo={props.handleEditTodo}
+        handleUpdateInfo={props.handleUpdateInfo}
+        handleDeleteItem={props.handleDeleteItem}
         item={props.item}
         index={props.index}
       />

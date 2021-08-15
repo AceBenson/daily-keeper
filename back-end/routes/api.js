@@ -32,6 +32,7 @@ router.post('/workingitem/:id/update', workingitem_controller.workingitem_update
 
 router.get('/workingitem/:id', workingitem_controller.workingitem_detail);
 
+router.get('/workingitems/date', workingitem_controller.workingitem_list_filter_by_date);
 router.get('/workingitems', workingitem_controller.workingitem_list);
 
 module.exports = router;

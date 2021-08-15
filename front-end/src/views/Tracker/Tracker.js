@@ -3,17 +3,68 @@ import { Typography } from '@material-ui/core'
 
 import WorkingTimer from './WorkingTimer';
 import TodayList from './TodayList';
-import MySnackbar from './MySnackbar';
+import MySnackbar from '../../components/MySnackbar';
 
-const projects = [
-  "Course",
-  "Web",
-  "Machine Learning"
-];
+import { read_projects } from '../../api/projectAPI';
+import { create_workingitem, read_workingitems_filter_by_date, update_workingitem, delete_workingitem } from '../../api/workingitemAPI';
+
+// const projects = [
+//   "Course",
+//   "Web",
+//   "Machine Learning"
+// ];
 
 export default function Tracker() {
+  const [workingItemAndList, setWorkingItemAndList] = React.useState({
+    workingItem: {
+      project: {},
+      start_time: null,
+      end_time: null,
+      progress: "",
+      todo: "",
+    },
+    workingItemList: []
+  });
+
   const [open, setOpen] = React.useState(false);
   const [info, setInfo] = React.useState("");
+  const [projects, setProjects] = React.useState([]);
+
+  React.useEffect(() => {
+    const fetchAndSetData = async () => {
+      const project_res = await read_projects();
+      if (project_res.status === 200)
+        setProjects(project_res.data);
+      else
+        console.log(project_res);
+  
+  
+      const workingitem_res = await read_workingitems_filter_by_date({params: {date: new Date()}});
+      console.log(workingitem_res);
+      if (project_res.status === 200) {
+        const newWorkingItem = workingitem_res.data.map(function(item){
+          return {
+            ...item,
+            start_time: new Date(item.start_time),
+            end_time: new Date(item.end_time),
+          }
+        })
+        setWorkingItemAndList({
+          workingItem: {
+            project: {},
+            start_time: null,
+            end_time: null,
+            progress: "",
+            todo: "",
+          },
+          workingItemList: newWorkingItem
+        })
+      }
+      else
+        console.log(workingitem_res);
+    }
+    fetchAndSetData();
+  }, []);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -22,24 +73,12 @@ export default function Tracker() {
     setOpen(false);
   };
 
-
-  const [workingItemAndList, setWorkingItemAndList] = React.useState({
-    workingItem: {
-      project: "",
-      startTime: null,
-      endTime: null,
-      progress: "",
-      todo: "",
-    },
-    workingItemList: []
-  });
-
   const handleProjectChange = (event) => {
     setWorkingItemAndList({
       ...workingItemAndList, 
       workingItem: {
         ...workingItemAndList.workingItem, 
-        project: event.target.value,
+        project: projects.find(project => project.name === event.target.value),
       }
     });
   };
@@ -47,7 +86,7 @@ export default function Tracker() {
   const handleStartTimerBtn = () => {
     const newWorkingItem = {
       ...workingItemAndList.workingItem, 
-      startTime: new Date()
+      start_time: new Date()
     }
     setWorkingItemAndList({
       ...workingItemAndList,
@@ -55,89 +94,123 @@ export default function Tracker() {
     });
   };
 
-  const handleStopTimerBtn = () => {
+  const handleStopTimerBtn = async () => {
     const newWorkingItem = {
       ...workingItemAndList.workingItem, 
-      endTime: new Date()
+      end_time: new Date()
     }
-    setWorkingItemAndList({
-      ...workingItemAndList,
-      workingItem: {
-        project: "",
-        startTime: null,
-        endTime: null,
-        progress: "",
-        todo: "",
-      },
-      workingItemList: [
-        ...workingItemAndList.workingItemList,
-        newWorkingItem
-      ]
-    });
 
-    setInfo("Working item entry has been created.");
-    setOpen(true);
+    const res = await create_workingitem(newWorkingItem);
+
+    if (res.status === 200) {
+      setWorkingItemAndList({
+        ...workingItemAndList,
+        workingItem: {
+          project: {},
+          start_time: null,
+          end_time: null,
+          progress: "",
+          todo: "",
+        },
+        workingItemList: [
+          ...workingItemAndList.workingItemList,
+          newWorkingItem
+        ]
+      });
+      setInfo("Working item entry has been created.");
+      setOpen(true);
+    } else {
+      console.log(res);
+    }
   };
 
-  const handleStartTimeChange = (key, value) => {
+  const handleStartTimeChange = async (key, value) => {
     // console.log(`handleStartTimeChange key:${key}, value:${value}`);
     const newWorkingItemList = [...workingItemAndList.workingItemList];
-    newWorkingItemList[key].startTime.setHours(value.substr(0, 2));
-    newWorkingItemList[key].startTime.setMinutes(value.substr(3, 2));
-    newWorkingItemList[key].startTime.setSeconds(value.substr(6, 2));
+    newWorkingItemList[key].start_time.setHours(value.substr(0, 2));
+    newWorkingItemList[key].start_time.setMinutes(value.substr(3, 2));
+    newWorkingItemList[key].start_time.setSeconds(value.substr(6, 2));
 
-    setWorkingItemAndList({
-      ...workingItemAndList,
-      workingItemList: newWorkingItemList
-    });
+    const res = await update_workingitem(newWorkingItemList[key]._id, {start_time: newWorkingItemList[key].start_time});
 
-    setInfo("Update start time successfully.");
-    setOpen(true);
+    if (res.status === 200) {
+      setWorkingItemAndList({
+        ...workingItemAndList,
+        workingItemList: newWorkingItemList
+      });
+      setInfo("Update start time successfully.");
+      setOpen(true);
+    } else {
+      console.log(res);
+    }
   }
 
-  const handleEndTimeChange = (key, value) => {
-    // console.log(`handleEndTimeChange key:${key}, value:${value}`);
+  const handleEndTimeChange = async (key, value) => {
     const newWorkingItemList = [...workingItemAndList.workingItemList];
-    newWorkingItemList[key].endTime.setHours(value.substr(0, 2));
-    newWorkingItemList[key].endTime.setMinutes(value.substr(3, 2));
-    newWorkingItemList[key].endTime.setSeconds(value.substr(6, 2));
+    newWorkingItemList[key].end_time.setHours(value.substr(0, 2));
+    newWorkingItemList[key].end_time.setMinutes(value.substr(3, 2));
+    newWorkingItemList[key].end_time.setSeconds(value.substr(6, 2));
 
+    const res = await update_workingitem(newWorkingItemList[key]._id, {end_time: newWorkingItemList[key].end_time});
 
-    setWorkingItemAndList({
-      ...workingItemAndList,
-      workingItemList: newWorkingItemList
-    });
-
-    setInfo("Update end time successfully.");
-    setOpen(true);
+    if (res.status === 200) {
+      setWorkingItemAndList({
+        ...workingItemAndList,
+        workingItemList: newWorkingItemList
+      });
+      setInfo("Update end time successfully.");
+      setOpen(true);
+    } else {
+      console.log(res);
+    }
   }
 
-  const handleEditProgress = (key, value) => {
+  const handleEditProgress = async (key, value) => {
     const newWorkingItemList = [...workingItemAndList.workingItemList];
-
     newWorkingItemList[key].progress = value;
 
     setWorkingItemAndList({
       ...workingItemAndList,
       workingItemList: newWorkingItemList
     });
-
-    setInfo("Update progress successfully.");
-    setOpen(true);
   }
 
-  const handleEditTodo = (key, value) => {
+  const handleEditTodo = async (key, value) => {
     const newWorkingItemList = [...workingItemAndList.workingItemList];
-
     newWorkingItemList[key].todo = value;
 
     setWorkingItemAndList({
       ...workingItemAndList,
       workingItemList: newWorkingItemList
     });
+  }
 
-    setInfo("Update todo successfully.");
-    setOpen(true);
+  const handleUpdateInfo = async (key, progress, todo) => {
+    const res = await update_workingitem(workingItemAndList.workingItemList[key]._id, {progress: progress, todo: todo});
+
+    if (res.status === 200) {
+      setInfo("Update todo successfully.");
+      setOpen(true);
+    } else {
+      console.log(res);
+    }
+  }
+
+  const handleDeleteItem = async (key) => {
+    const newWorkingItemList = [...workingItemAndList.workingItemList];
+    newWorkingItemList.splice(key, 1);
+    const res = await delete_workingitem(workingItemAndList.workingItemList[key]._id);
+
+    if (res.status === 200) {
+      setWorkingItemAndList({
+        ...workingItemAndList,
+        workingItemList: newWorkingItemList
+      });
+      setInfo("Update todo successfully.");
+      setOpen(true);
+    } else {
+      console.log(res);
+    }
   }
 
   return (
@@ -158,6 +231,8 @@ export default function Tracker() {
         handleEndTimeChange={handleEndTimeChange}
         handleEditProgress={handleEditProgress}
         handleEditTodo={handleEditTodo}
+        handleUpdateInfo={handleUpdateInfo}
+        handleDeleteItem={handleDeleteItem}
       />
       <MySnackbar
         open={open}

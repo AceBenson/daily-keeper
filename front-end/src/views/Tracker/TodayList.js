@@ -1,5 +1,5 @@
 import React from 'react'
-import { List, makeStyles } from '@material-ui/core';
+import { List, makeStyles, Backdrop, CircularProgress } from '@material-ui/core';
 import TodayListItem from './TodayListItem';
 
 const styles = (theme) => ({
@@ -7,6 +7,10 @@ const styles = (theme) => ({
     // backgroundColor: "rgb(20, 20, 20)",
     backgroundColor: theme.palette.background.paper,
     boxShadow: "10px 5px 5px black",
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer-1,
+    color: '#fff',
   }
 });
 
@@ -27,9 +31,14 @@ export default function TodayList(props) {
             handleEndTimeChange={props.handleEndTimeChange}
             handleEditProgress={props.handleEditProgress}
             handleEditTodo={props.handleEditTodo}
+            handleUpdateInfo={props.handleUpdateInfo}
+            handleDeleteItem={props.handleDeleteItem}
           />
         ))}
       </List>
+      <Backdrop className={classes.backdrop} open={props.workingItemList.length === 0}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </div>
   )
 }

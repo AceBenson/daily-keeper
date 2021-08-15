@@ -22,7 +22,7 @@ export default function WorkingTimer(props) {
   //   setWorkingItem({...workingItem, project: event.target.value});
   // };
   React.useEffect(() => {
-    const timerId = setTimeout(() => {if (isCounting) {setElapsedTime(new Date().getTime() - props.workingItem.startTime.getTime())}}, 1000);
+    const timerId = setTimeout(() => {if (isCounting) {setElapsedTime(new Date().getTime() - props.workingItem.start_time.getTime())}}, 1000);
     return () => clearTimeout(timerId);
   });
 
@@ -53,12 +53,12 @@ export default function WorkingTimer(props) {
                 <Select
                   labelId="project-label"
                   id="project"
-                  value={props.workingItem.project}
+                  value={props.workingItem.project.name ? props.workingItem.project.name : ""}
                   onChange={props.handleProjectChange}
                 >
                   {props.projects.map((item, key) => {
                     return (
-                      <MenuItem value={item} key={key}>{item}</MenuItem>
+                      <MenuItem value={item.name} key={key}>{item.name}</MenuItem>
                     )
                   })}
                 </Select>

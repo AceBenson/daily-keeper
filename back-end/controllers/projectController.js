@@ -12,7 +12,7 @@ exports.project_list = function(req, res, next) {
     });
 };
 
-exports.project_detail = function(req, res) {
+exports.project_detail = function(req, res, next) {
   async.parallel({
     project: function (callback) {
       Project.findById(req.params.id)
@@ -30,7 +30,6 @@ exports.project_detail = function(req, res) {
 };
 
 exports.project_create_get = function(req, res) {
-  // console.log("TEST GET");
   res.send('NOT IMPLEMENTED: Project create GET');
 };
 
@@ -40,19 +39,24 @@ exports.project_create_post = (req, res) => {
     color: req.body.color,
   });
 
-  // Todo: check project is already in database
-
-  project.save(function (err) {
-    if (err) {
-      console.log("Error: ", err);
-      res.send("Fail");
-      return
-    }
-    console.log("Create project success: ", project);
-    res.send("Success");
-
-    // Maybe I can send [project] so I don't need to fetch whole project list
-  });
+  Project.findOne({'name': req.body.name})
+    .exec( function(err, found_project) {
+      if (err) return next(err);
+      if (found_project) {
+        // res.send("Already exists");
+        res.status(400).json({error: "Project already exists"})
+      } else {
+        project.save(function (err) {
+          if (err) {
+            console.log("Error: ", err);
+            res.status(503).json({error: err})
+            return
+          }
+          console.log("Create project success: ", project);
+          res.json(project);
+        });
+      }
+    });
 }
 
 exports.project_delete_get = function(req, res) {
@@ -61,12 +65,12 @@ exports.project_delete_get = function(req, res) {
 
 exports.project_delete_post = function(req, res) {
 
-  // Todo: Check workingItem belongs to this project
+  // Todo: Check workingItem belongs to this project and delete them
 
   Project.findByIdAndRemove(req.params.id, function (err) {
     if (err) {
       console.log("Error: ", err);
-      res.send("Fail");
+      res.status(503).json({error: err})
       return
     }
     console.log("Delete project success");
@@ -84,16 +88,14 @@ exports.project_update_post = function(req, res) {
     color: req.body.color,
   };
 
-  // Todo: Check if they are the same.
-
   Project.findByIdAndUpdate(req.params.id, project, {}, function (err) {
     if (err) {
       console.log("Error: ", err);
-      res.send("Fail");
+      res.status(503).json({error: err})
       return
     }
     console.log("Update project success: ", project);
-    res.send("Success");
+    res.json(project);
   });
 
 };

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Typography, TextField, Collapse, makeStyles} from '@material-ui/core';
+import { Typography, TextField, Collapse, makeStyles, Button} from '@material-ui/core';
 
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
@@ -64,6 +64,12 @@ export default function TodayListItemCollapse(props) {
             </div>
           ))
         }
+        <Button style={{float: "right", margin: "10px"}} variant="contained" color="primary" onClick={ () => props.handleUpdateInfo(props.index, props.item.progress, props.item.todo)}>
+          UPDATE
+        </Button>
+        <Button style={{float: "right", margin: "10px"}} variant="contained" color="secondary" onClick={ () => props.handleDeleteItem(props.index)}>
+          DELETE
+        </Button>
       </Collapse>
     </div>
   )

@@ -22,13 +22,12 @@ export default function ProjectRow(props) {
   const [history, setHistory] = React.useState([]);
 
   React.useEffect(() => {
-    // console.table(project);
-    // fetch("/api/project/"+project._id)
-    //   .then((res) => res.json())
-    //   .then((data) => {setHistory(data.history)});
     async function fetchData() {
       const res = await read_project_detail(project._id);
-      setHistory(res.data.history);
+      if (res.status === 200)
+        setHistory(res.data.history);
+      else
+        console.log(res);
     }
     fetchData();
   }, [project._id]);
