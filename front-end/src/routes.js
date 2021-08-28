@@ -5,7 +5,7 @@ import PostAddIcon from '@material-ui/icons/PostAdd';
 import SettingsIcon from '@material-ui/icons/Settings';
 
 import Tracker from './views/Tracker/Tracker'
-import Calendar from './views/Calendar'
+import Calendar from './views/Calendar/Calendar'
 import Dashboard from './views/Dashboard'
 import Project from './views/Project/Project'
 import Setting from './views/Setting'

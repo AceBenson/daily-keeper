@@ -32,15 +32,19 @@ export default function Project() {
 
   const [projects, setProjects] = React.useState([]);
 
-  const fetchDataAndSetProject = async () => {
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const fetchDataAndSetProject = async () => {
     const res = await read_projects();
-    if (res.status === 200)
+    if (res.status === 200) {
+      setIsLoading(false);
       setProjects(res.data);
+    }
     else
       console.log(res);
   }
 
-  React.useEffect(() => {
     fetchDataAndSetProject();
   }, []);
 
@@ -149,7 +153,7 @@ export default function Project() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Backdrop className={classes.backdrop} open={projects.length === 0}>
+      <Backdrop className={classes.backdrop} open={isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
       {/* {projects.length === 0 && <LinearProgress />} */}

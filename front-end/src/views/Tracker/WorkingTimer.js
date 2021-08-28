@@ -22,12 +22,12 @@ export default function WorkingTimer(props) {
   //   setWorkingItem({...workingItem, project: event.target.value});
   // };
   React.useEffect(() => {
-    const timerId = setTimeout(() => {if (isCounting) {setElapsedTime(new Date().getTime() - props.workingItem.start_time.getTime())}}, 1000);
-    return () => clearTimeout(timerId);
+    const timerId = setInterval(() => {if (isCounting) {setElapsedTime(new Date().getTime() - props.workingItem.start_time.getTime())}}, 1000);
+    return () => clearInterval(timerId);
   });
 
   const handleStartTimerBtn = () => {
-    if (!props.workingItem.project) {
+    if (!props.workingItem.project.name) {
       alert("Select Porject");
       return;
     }

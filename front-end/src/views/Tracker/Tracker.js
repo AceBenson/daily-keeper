@@ -30,6 +30,8 @@ export default function Tracker() {
   const [info, setInfo] = React.useState("");
   const [projects, setProjects] = React.useState([]);
 
+  const [isLoading, setIsLoading] = React.useState(true);
+
   React.useEffect(() => {
     const fetchAndSetData = async () => {
       const project_res = await read_projects();
@@ -40,9 +42,9 @@ export default function Tracker() {
   
   
       const workingitem_res = await read_workingitems_filter_by_date({params: {date: new Date()}});
-      console.log(workingitem_res);
-      if (project_res.status === 200) {
-        const newWorkingItem = workingitem_res.data.map(function(item){
+      if (workingitem_res.status === 200) {
+        setIsLoading(false);
+        const newWorkingItemList = workingitem_res.data.map(function(item){
           return {
             ...item,
             start_time: new Date(item.start_time),
@@ -57,7 +59,7 @@ export default function Tracker() {
             progress: "",
             todo: "",
           },
-          workingItemList: newWorkingItem
+          workingItemList: newWorkingItemList
         })
       }
       else
@@ -65,6 +67,12 @@ export default function Tracker() {
     }
     fetchAndSetData();
   }, []);
+
+  const showSnackBar = (content) => {
+    setOpen(false);
+    setInfo(content);
+    setOpen(true);
+  }
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -92,6 +100,10 @@ export default function Tracker() {
       ...workingItemAndList,
       workingItem: newWorkingItem
     });
+
+    window.timer = setInterval(() => {
+      document.title = new Date(new Date().getTime() - newWorkingItem.start_time.getTime()).toISOString().substr(11, 8);
+    }, 1000);
   };
 
   const handleStopTimerBtn = async () => {
@@ -100,9 +112,19 @@ export default function Tracker() {
       end_time: new Date()
     }
 
+    clearInterval(window.timer);
+    document.title = "Daily Keeper";
+
     const res = await create_workingitem(newWorkingItem);
 
     if (res.status === 200) {
+      const resWorkingItem = {
+        ...res.data,
+        project: projects.find(project => project.id === res.data.project),
+        start_time: new Date(res.data.start_time),
+        end_time: new Date(res.data.end_time),
+      }
+
       setWorkingItemAndList({
         ...workingItemAndList,
         workingItem: {
@@ -114,11 +136,10 @@ export default function Tracker() {
         },
         workingItemList: [
           ...workingItemAndList.workingItemList,
-          newWorkingItem
+          resWorkingItem
         ]
       });
-      setInfo("Working item entry has been created.");
-      setOpen(true);
+      showSnackBar("Working item entry has been created.");
     } else {
       console.log(res);
     }
@@ -131,6 +152,8 @@ export default function Tracker() {
     newWorkingItemList[key].start_time.setMinutes(value.substr(3, 2));
     newWorkingItemList[key].start_time.setSeconds(value.substr(6, 2));
 
+    newWorkingItemList[key].elapsed_time = newWorkingItemList[key].end_time - newWorkingItemList[key].start_time;
+
     const res = await update_workingitem(newWorkingItemList[key]._id, {start_time: newWorkingItemList[key].start_time});
 
     if (res.status === 200) {
@@ -138,8 +161,7 @@ export default function Tracker() {
         ...workingItemAndList,
         workingItemList: newWorkingItemList
       });
-      setInfo("Update start time successfully.");
-      setOpen(true);
+      showSnackBar("Update start time successfully.");
     } else {
       console.log(res);
     }
@@ -151,6 +173,8 @@ export default function Tracker() {
     newWorkingItemList[key].end_time.setMinutes(value.substr(3, 2));
     newWorkingItemList[key].end_time.setSeconds(value.substr(6, 2));
 
+    newWorkingItemList[key].elapsed_time = newWorkingItemList[key].end_time - newWorkingItemList[key].start_time;
+
     const res = await update_workingitem(newWorkingItemList[key]._id, {end_time: newWorkingItemList[key].end_time});
 
     if (res.status === 200) {
@@ -158,8 +182,7 @@ export default function Tracker() {
         ...workingItemAndList,
         workingItemList: newWorkingItemList
       });
-      setInfo("Update end time successfully.");
-      setOpen(true);
+      showSnackBar("Update end time successfully.");
     } else {
       console.log(res);
     }
@@ -189,8 +212,7 @@ export default function Tracker() {
     const res = await update_workingitem(workingItemAndList.workingItemList[key]._id, {progress: progress, todo: todo});
 
     if (res.status === 200) {
-      setInfo("Update todo successfully.");
-      setOpen(true);
+      showSnackBar("Update info successfully.");
     } else {
       console.log(res);
     }
@@ -206,8 +228,7 @@ export default function Tracker() {
         ...workingItemAndList,
         workingItemList: newWorkingItemList
       });
-      setInfo("Update todo successfully.");
-      setOpen(true);
+      showSnackBar("Delete item successfully.");
     } else {
       console.log(res);
     }
@@ -226,6 +247,7 @@ export default function Tracker() {
         Today
       </Typography>
       <TodayList 
+        isLoading={isLoading}
         workingItemList={workingItemAndList.workingItemList}
         handleStartTimeChange={handleStartTimeChange}
         handleEndTimeChange={handleEndTimeChange}

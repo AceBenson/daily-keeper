@@ -34,7 +34,7 @@ export default function ProjectCreateDialog(props) {
           Cancel
         </Button>
         <Button variant="contained" onClick={() => {props.createProject(projectName.current.value, projectColor);}} color="primary">
-          OK
+          Update
         </Button>
       </DialogActions>
     </Dialog>

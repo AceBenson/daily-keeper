@@ -49,7 +49,7 @@ export default function ProjectEditDialog(props) {
           Delete
         </Button>
         <Button variant="contained" onClick={() => props.editProject(props._id, projectName, projectColor)} color="primary">
-          OK
+          Update
         </Button>
       </DialogActions>
     </Dialog>

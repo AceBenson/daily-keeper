@@ -30,7 +30,10 @@ export default function TodayListItem(props) {
                 Object.entries(intervalToDuration({
                   start: props.item.start_time, 
                   end: props.item.end_time
-                })).map((data, index) => {return data[1] !== 0 && (('0'+data[1]).slice(-2) + (index === 5 ? "" : ":"))})
+                })).map((data, index) => {
+                  const targets = ["hours", "minutes", "seconds"]
+                  return targets.indexOf(data[0]) !== -1 && (('0'+data[1]).slice(-2) + (index === 5 ? "" : ":"))
+                })
               }
             </Typography>
           </Grid>

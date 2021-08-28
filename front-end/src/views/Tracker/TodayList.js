@@ -36,7 +36,7 @@ export default function TodayList(props) {
           />
         ))}
       </List>
-      <Backdrop className={classes.backdrop} open={props.workingItemList.length === 0}>
+      <Backdrop className={classes.backdrop} open={props.isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </div>

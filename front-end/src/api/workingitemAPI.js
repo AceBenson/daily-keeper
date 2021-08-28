@@ -6,8 +6,15 @@ export const read_workingitems = async () => {
     .catch(error => {console.log(`error: ${error}`); return error.response;});
 }
 
+export const read_workingitems_week = async (datas) => {
+  return axios.all(datas.map( data => axios.get("/api/workingitems/date", data) ))
+    .then(axios.spread((...responses) => {
+      return responses;
+    }))
+    .catch(error => {console.log(`error: ${error}`); return error.response;});
+}
+
 export const read_workingitems_filter_by_date = async (data) => {
-  console.log(data);
   return axios.get("/api/workingitems/date", data)
     .then(response => response)
     .catch(error => {console.log(`error: ${error}`); return error.response;});
