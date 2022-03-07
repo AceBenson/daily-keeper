@@ -1,6 +1,6 @@
 # Daily Keeper - Tracking your time!
 
-This is a full-stack web application with React, Node.js, Express, mongoDB. (Ongoing)
+This is a full-stack web application with React, Node.js, Express, MongoDB. (ongoing)
 
 ![img](./demo.png)
 
